@@ -9,11 +9,14 @@ public class PlayerController : MonoBehaviour {
     public GameObject missilePrefab;
     bool fire;//para que si mantienes pulsado no clickes 1023023 veces+
     public float fireSpeed= 1f;
+    public float cooldownfireDur= 1f;
+    float cooldownfire;
 
 	// Use this for initialization
 	void Start () {
         limit = (((Screen.width / 100f) / 2f) / Camera.main.aspect);
-	}
+        cooldownfire = cooldownfireDur;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -29,12 +32,13 @@ public class PlayerController : MonoBehaviour {
             transform.position = new Vector3(-limit, transform.position.y, transform.position.z);
             GetComponent<Rigidbody2D>().velocity = Vector2.zero; //pongo la velocidad a 0 para que el jugador pueda facilmente cambiar de direccion
         }
-
+        cooldownfire -= Time.deltaTime;
         //disparar misil
-        if (Input.GetAxis("Fire1")!= 0)
+        if  (Input.GetAxis("Fire1")!= 0)
         {
-            if (!fire)
+            if (cooldownfire <= 0 && !fire)
             {
+                cooldownfire = cooldownfireDur;
                 GameObject missileInstance = Instantiate(missilePrefab);
                 missileInstance.transform.SetParent(transform.parent);
                 missileInstance.transform.position = transform.position;
