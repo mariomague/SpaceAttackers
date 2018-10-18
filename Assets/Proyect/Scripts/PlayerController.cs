@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    public float destroyMissileTime = 2.5f;
     public float speed = 3f;
     float limit;
     public GameObject missilePrefab;
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour {
                 missileInstance.transform.SetParent(transform.parent);
                 missileInstance.transform.position = transform.position;
                 missileInstance.GetComponent<Rigidbody2D>().velocity = Vector2.up * fireSpeed;
-                Destroy(missileInstance, 2f); //destruyelo en 2 segundos
+                Destroy(missileInstance, destroyMissileTime); //destruyelo en 2 segundos
                 fire = true;
             }
         } else
