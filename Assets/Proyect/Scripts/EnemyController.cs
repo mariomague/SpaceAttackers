@@ -6,6 +6,7 @@ public class EnemyController : MonoBehaviour {
 
     public GameObject particulas;
 	// Use this for initialization
+
 	void Start () {
 		
 	}

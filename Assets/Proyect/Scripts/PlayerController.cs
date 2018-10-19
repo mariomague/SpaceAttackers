@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("EnemyMissile"))
+        if (collision.CompareTag("EnemyMissile") || collision.CompareTag("Enemy"))
         {
             Destroy(gameObject);
             GameObject particulasInstance = Instantiate(explosionAnim);

@@ -1,19 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
     public float shootingInterval = 3f;
     public float shootingSpeed = 2f;
     public GameObject enemyMissile;
-    public AudioSource shootsound;
-    float shootingTimer;
+    public GameObject enemyContainer;
+    public float movingInterval = 0.5f;
+    public float movingDistance= 0.1f;
+    public float horizontalLimit = 2.5f;
+    public GameObject player;
 
-	// Use this for initialization
-	void Start () {
+    float movingDirection = 1f;
+    float movingTimer;
+    float shootingTimer;
+    AudioSource shootsound;
+
+
+    // Use this for initialization
+    void Start () {
         shootingTimer = shootingInterval;
         shootsound = GetComponent<AudioSource>();
+        movingTimer = movingInterval;
 	}
 	
 	// Update is called once per frame
@@ -36,5 +47,50 @@ public class GameController : MonoBehaviour {
             }
             
         }
-	}
+        //movement logic
+        movingTimer -= Time.deltaTime;
+        if(movingTimer <= 0)
+        {
+            movingTimer = movingInterval;
+            enemyContainer.transform.position = new Vector2(enemyContainer.transform.position.x+(movingDistance*movingDirection)*1.1f,enemyContainer.transform.position.y);
+            if (movingDirection > 0)
+            {
+                float rightmostPosition = 0f;
+                foreach(EnemyController enemy in GetComponentsInChildren<EnemyController>())
+                {
+                    if (enemy.transform.position.x > rightmostPosition)
+                    {
+                        rightmostPosition = enemy.transform.position.x;
+                    }
+                }
+
+                if(rightmostPosition > horizontalLimit)
+                {
+                    movingDirection *= -1;
+                    enemyContainer.transform.position = new Vector2(enemyContainer.transform.position.x , enemyContainer.transform.position.y - movingDistance );
+                }
+            }else
+            {
+                float leftmostPosition = 0f;
+                foreach (EnemyController enemy in GetComponentsInChildren<EnemyController>())
+                {
+                    if (enemy.transform.position.x < leftmostPosition)
+                    {
+                        leftmostPosition = enemy.transform.position.x;
+                    }
+                }
+
+                if (leftmostPosition < -horizontalLimit)
+                {
+                    movingDirection *= -1;
+                    enemyContainer.transform.position = new Vector2(enemyContainer.transform.position.x, enemyContainer.transform.position.y - movingDistance);
+                }
+            }
+        }
+        if (GetComponentsInChildren<EnemyController>().Length <= 0 || player == null)
+        {
+            SceneManager.LoadScene("Game");
+        }
+    }
+    
 }
