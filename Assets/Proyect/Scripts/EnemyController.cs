@@ -20,8 +20,9 @@ public class EnemyController : MonoBehaviour {
         if (collision.CompareTag("Missile")==true)
         {
             GameObject particulasInstance = Instantiate(particulas);
-            particulasInstance.transform.SetParent(transform.parent);
             particulasInstance.transform.position = transform.position;
+
+
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
